@@ -7,10 +7,14 @@
 
 <p><%= homeStartingContent %></p>
 
-<% postsList.forEach(element => { %>
-    <h3><%= element.title. %></h3>
-    <p><%= element.body %></p>
+<% postsList.forEach((element) => { %>
+    <h1><%= element.title %></h1>
+    <% if (element.href) { %> 
+        <p><%= element.body %> <span><a href=<%= element.href %>>Read me</a></span> </p> 
+    <% } else { %>
+        <p><%= element.body %></p> 
+    <% } %> 
 <% }); %> 
 
-<%- include("partials/footer.ejs")-%>
+<%- include("partials/footer.ejs") -%>
 

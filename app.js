@@ -6,6 +6,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
+var _ = require('lodash');
 
 const app = express();
 
@@ -22,14 +23,23 @@ const HOMESTARTINGCONTENT = "Lacus vel facilisis volutpat est velit egestas dui 
 const ABOUTCONTENT = "Hac habitasse platea dictumst vestibulum rhoncus est pellentesque. Dictumst vestibulum rhoncus est pellentesque elit ullamcorper. Non diam phasellus vestibulum lorem sed. Platea dictumst quisque sagittis purus sit. Egestas sed sed risus pretium quam vulputate dignissim suspendisse. Mauris in aliquam sem fringilla. Semper risus in hendrerit gravida rutrum quisque non tellus orci. Amet massa vitae tortor condimentum lacinia quis vel eros. Enim ut tellus elementum sagittis vitae. Mauris ultrices eros in cursus turpis massa tincidunt dui.";
 const CONTACTCONTENT = "Scelerisque eleifend donec pretium vulputate sapien. Rhoncus urna neque viverra justo nec ultrices. Arcu dui vivamus arcu felis bibendum. Consectetur adipiscing elit duis tristique. Risus viverra adipiscing at in tellus integer feugiat. Sapien nec sagittis aliquam malesuada bibendum arcu vitae. Consequat interdum varius sit amet mattis. Iaculis nunc sed augue lacus. Interdum posuere lorem ipsum dolor sit amet consectetur adipiscing elit. Pulvinar elementum integer enim neque. Ultrices gravida dictum fusce ut placerat orci nulla. Mauris in aliquam sem fringilla ut morbi tincidunt. Tortor posuere ac ut consequat semper viverra nam libero.";
 let posts = [];
+let postsToHomePage = [];
+
+
+/* Functions --------------------------------------------------------- */
+
+
+function trateTitle(param) {
+  const lowerParam = _.lowerCase(param);
+  return _.replace(lowerParam, " ", "-");
+}
 
 
 /* Home rout --------------------------------------------------------- */
 
 
 app.get("/", (req, res) => {
-  res.render("home", {homeStartingContent: HOMESTARTINGCONTENT, postsList: posts});
-  console.log(posts);
+  res.render("home", {homeStartingContent: HOMESTARTINGCONTENT, postsList: postsToHomePage});
 });
 
 
@@ -64,6 +74,12 @@ app.post("/compose", (req, res) => {
 
   posts.push(post);
 
+  if(post.body.length >= 100) { 
+    postsToHomePage.push({"href": ("posts/" + trateTitle(post.title)), "title": post.title, "body": post.body.slice(0, 100) + "..."});
+  } else {  
+    postsToHomePage.push({"href": false, "title": post.title, "body": post.body});
+  } 
+
   res.redirect("/");
 });
 
@@ -72,7 +88,19 @@ app.post("/compose", (req, res) => {
 
 
 app.get("/posts/:post", (req, res) => {
-  res.send(req.params.post);
+  const param = req.params.post;
+
+  posts.forEach((post) => {
+    const postTitle = post.title;
+    const postBody = post.body;
+
+    const tratedPostTitle = trateTitle(postTitle);
+
+    if (tratedPostTitle === param) {
+      res.render("post", {postTitle: postTitle, postBody: postBody});
+    }
+  });
+  
 });
 
 
