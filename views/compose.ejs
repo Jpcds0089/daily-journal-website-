@@ -6,14 +6,10 @@
 <h1>Compose</h1>
 <form action="/compose" method="post">
     <p class="mb-1">Title</p>
-    <div class="form-floating mb-3">
-        <input type="text" class="form-control" name="title" placeholder="">
-    </div>
+    <input type="text" class="form-control mb-3" name="postTitle" placeholder="">
     <p class="mb-1">Post</p>
-    <div class="form-floating">
-        <textarea class="form-control" placeholder="" style="height: 100px"></textarea>
-    </div>
-    <button class="btn btn-primary mt-3" type="submit">Publish</button>
+    <textarea class="form-control mb-3" name="postBody" placeholder="" style="height: 100px"></textarea>
+    <button class="btn btn-primary" type="submit">Publish</button>
 </form>
 
   

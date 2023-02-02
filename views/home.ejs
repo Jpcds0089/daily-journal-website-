@@ -5,8 +5,12 @@
 
 <h1>Home</h1>
 
-<p><%- homeStartingContent %></p>
+<p><%= homeStartingContent %></p>
 
+<% postsList.forEach(element => { %>
+    <h3><%= element.title. %></h3>
+    <p><%= element.body %></p>
+<% }); %> 
 
 <%- include("partials/footer.ejs")-%>
 
